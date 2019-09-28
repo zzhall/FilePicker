@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2016 Angad Singh
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.giszone.filepicker.view;
 
@@ -25,24 +10,20 @@ import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.giszone.filepicker.filepicker.R;
 import com.giszone.filepicker.controller.DialogSelectionListener;
+import com.giszone.filepicker.filepicker.R;
 import com.giszone.filepicker.model.DialogConfigs;
 import com.giszone.filepicker.model.DialogProperties;
 
 import java.io.File;
 
-/**<p>
- * Created by angads25 on 15-07-2016.
- * </p>
- */
 
 public class FilePickerPreference extends Preference implements
         DialogSelectionListener,
         Preference.OnPreferenceClickListener {
     private FilePickerDialog mDialog;
     private DialogProperties properties;
-    private String titleText=null;
+    private String titleText = null;
 
     public FilePickerPreference(Context context) {
         super(context);
@@ -93,7 +74,7 @@ public class FilePickerPreference extends Preference implements
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        if (state == null || !(state instanceof SavedState)) {
+        if (!(state instanceof SavedState)) {
             super.onRestoreInstanceState(state);
             return;
         }
@@ -115,9 +96,9 @@ public class FilePickerPreference extends Preference implements
 
     @Override
     public void onSelectedFilePaths(String[] files) {
-        StringBuilder buff=new StringBuilder();
-        for(String path:files)
-        {   buff.append(path).append(":");
+        StringBuilder buff = new StringBuilder();
+        for (String path : files) {
+            buff.append(path).append(":");
         }
         String dFiles = buff.toString();
         if (isPersistent()) {
@@ -125,8 +106,7 @@ public class FilePickerPreference extends Preference implements
         }
         try {
             getOnPreferenceChangeListener().onPreferenceChange(this, dFiles);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -137,8 +117,8 @@ public class FilePickerPreference extends Preference implements
         return false;
     }
 
-    public void setProperties(DialogProperties properties)
-    {   mDialog.setProperties(properties);
+    public void setProperties(DialogProperties properties) {
+        mDialog.setProperties(properties);
     }
 
     private static class SavedState extends BaseSavedState {
@@ -161,54 +141,48 @@ public class FilePickerPreference extends Preference implements
 
         @SuppressWarnings("unused")
         public static final Creator<SavedState> CREATOR =
-        new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
+                new Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 
     private void initProperties(AttributeSet attrs) {
-        TypedArray tarr=getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.FilePickerPreference,0,0);
+        TypedArray tarr = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.FilePickerPreference, 0, 0);
         final int N = tarr.getIndexCount();
-        for (int i = 0; i < N; ++i)
-        {   int attr = tarr.getIndex(i);
+        for (int i = 0; i < N; ++i) {
+            int attr = tarr.getIndex(i);
             if (attr == R.styleable.FilePickerPreference_selection_mode) {
-                properties.selection_mode=tarr.getInteger(R.styleable.FilePickerPreference_selection_mode, DialogConfigs.SINGLE_MODE);
-            }
-            else if (attr == R.styleable.FilePickerPreference_selection_type) {
-                properties.selection_type=tarr.getInteger(R.styleable.FilePickerPreference_selection_type,DialogConfigs.FILE_SELECT);
-            }
-            else if (attr == R.styleable.FilePickerPreference_root_dir) {
-                String root_dir=tarr.getString(R.styleable.FilePickerPreference_root_dir);
-                if(root_dir!=null&&!root_dir.equals(""))
-                {   properties.root=new File(root_dir);
+                properties.selection_mode = tarr.getInteger(R.styleable.FilePickerPreference_selection_mode, DialogConfigs.SINGLE_MODE);
+            } else if (attr == R.styleable.FilePickerPreference_selection_type) {
+                properties.selection_type = tarr.getInteger(R.styleable.FilePickerPreference_selection_type, DialogConfigs.FILE_SELECT);
+            } else if (attr == R.styleable.FilePickerPreference_root_dir) {
+                String root_dir = tarr.getString(R.styleable.FilePickerPreference_root_dir);
+                if (root_dir != null && !root_dir.equals("")) {
+                    properties.root = new File(root_dir);
                 }
-            }
-            else if (attr == R.styleable.FilePickerPreference_error_dir) {
-                String error_dir=tarr.getString(R.styleable.FilePickerPreference_error_dir);
-                if(error_dir!=null&&!error_dir.equals(""))
-                {   properties.error_dir=new File(error_dir);
+            } else if (attr == R.styleable.FilePickerPreference_error_dir) {
+                String error_dir = tarr.getString(R.styleable.FilePickerPreference_error_dir);
+                if (error_dir != null && !error_dir.equals("")) {
+                    properties.error_dir = new File(error_dir);
                 }
-            }
-            else if (attr == R.styleable.FilePickerPreference_offset_dir) {
-                String offset_dir=tarr.getString(R.styleable.FilePickerPreference_offset_dir);
-                if(offset_dir!=null&&!offset_dir.equals(""))
-                {   properties.offset=new File(offset_dir);
+            } else if (attr == R.styleable.FilePickerPreference_offset_dir) {
+                String offset_dir = tarr.getString(R.styleable.FilePickerPreference_offset_dir);
+                if (offset_dir != null && !offset_dir.equals("")) {
+                    properties.offset = new File(offset_dir);
                 }
-            }
-            else if (attr == R.styleable.FilePickerPreference_extensions) {
-                String extensions=tarr.getString(R.styleable.FilePickerPreference_extensions);
-                if(extensions!=null&&!extensions.equals(""))
-                {   properties.extensions= extensions.split(":");
+            } else if (attr == R.styleable.FilePickerPreference_extensions) {
+                String extensions = tarr.getString(R.styleable.FilePickerPreference_extensions);
+                if (extensions != null && !extensions.equals("")) {
+                    properties.extensions = extensions.split(":");
                 }
-            }
-            else if (attr == R.styleable.FilePickerPreference_title_text) {
-                titleText=tarr.getString(R.styleable.FilePickerPreference_title_text);
+            } else if (attr == R.styleable.FilePickerPreference_title_text) {
+                titleText = tarr.getString(R.styleable.FilePickerPreference_title_text);
             }
         }
         tarr.recycle();

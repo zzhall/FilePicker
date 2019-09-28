@@ -1,48 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:focusable="false"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:attr/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?android:listPreferredItemHeight"
     android:descendantFocusability="blocksDescendants"
-    style="?android:attr/background">
+    android:focusable="false"
+    android:minHeight="?android:listPreferredItemHeight"
+    android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/image_type"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
+        android:layout_gravity="center"
         android:layout_marginStart="8dp"
-        android:scaleType="centerInside"
-        android:id="@+id/image_type"
-        android:layout_gravity="center"/>
+        android:scaleType="centerInside" />
 
     <LinearLayout
-        android:orientation="vertical"
+        style="?android:attr/background"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:focusable="false"
         android:gravity="center_vertical"
-        style="?android:attr/background">
+        android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/fname"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            style="?android:attr/textAppearanceLarge"/>
-
-        <TextView
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/ftype"
-            android:textSize="12sp"
-            style="?android:attr/textViewStyle"/>
+            style="?android:attr/textViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <com.giszone.filepicker.widget.MaterialCheckbox
@@ -51,5 +48,5 @@
         android:layout_height="@dimen/checkbox_dimens"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="@dimen/checkbox_margin"
-        android:layout_marginRight="@dimen/checkbox_margin"/>
+        android:padding="10dp" />
 </LinearLayout>

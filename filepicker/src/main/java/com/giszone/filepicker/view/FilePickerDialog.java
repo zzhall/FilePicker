@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2016 Angad Singh
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.giszone.filepicker.view;
 
@@ -31,10 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.giszone.filepicker.filepicker.R;
 import com.giszone.filepicker.controller.DialogSelectionListener;
-import com.giszone.filepicker.controller.NotifyItemChecked;
 import com.giszone.filepicker.controller.adapters.FileListAdapter;
+import com.giszone.filepicker.filepicker.R;
 import com.giszone.filepicker.model.DialogConfigs;
 import com.giszone.filepicker.model.DialogProperties;
 import com.giszone.filepicker.model.FileListItem;
@@ -47,11 +31,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <p>
- * Created by Angad Singh on 09-07-2016.
- * </p>
- */
 
 public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickListener {
     private Context context;
@@ -94,13 +73,12 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_main);
-        listView = (ListView) findViewById(R.id.fileList);
-        select = (Button) findViewById(R.id.select);
+        listView = findViewById(R.id.fileList);
+        select = findViewById(R.id.select);
         int size = MarkedItemList.getFileCount();
         if (size == 0) {
             select.setEnabled(false);
@@ -112,73 +90,60 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
             }
             select.setTextColor(Color.argb(128, Color.red(color), Color.green(color), Color.blue(color)));
         }
-        dname = (TextView) findViewById(R.id.dname);
-        title = (TextView) findViewById(R.id.title);
-        dir_path = (TextView) findViewById(R.id.dir_path);
-        Button cancel = (Button) findViewById(R.id.cancel);
+        dname = findViewById(R.id.dname);
+        title = findViewById(R.id.title);
+        dir_path = findViewById(R.id.dir_path);
+        Button cancel = findViewById(R.id.cancel);
         if (negativeBtnNameStr != null) {
             cancel.setText(negativeBtnNameStr);
         }
-        select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*  Select Button is clicked. Get the array of all selected items
-                 *  from MarkedItemList singleton.
-                 */
-                String paths[] = MarkedItemList.getSelectedPaths();
-                //NullPointerException fixed in v1.0.2
-                if (callbacks != null) {
-                    callbacks.onSelectedFilePaths(paths);
-                }
-                dismiss();
+        select.setOnClickListener(view -> {
+            /*  Select Button is clicked. Get the array of all selected items
+             *  from MarkedItemList singleton.
+             */
+            String paths[] = MarkedItemList.getSelectedPaths();
+            //NullPointerException fixed in v1.0.2
+            if (callbacks != null) {
+                callbacks.onSelectedFilePaths(paths);
             }
+            dismiss();
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel();
-            }
-        });
+        cancel.setOnClickListener(view -> cancel());
         mFileListAdapter = new FileListAdapter(internalList, context, properties);
-        mFileListAdapter.setNotifyItemCheckedListener(new NotifyItemChecked() {
-            @Override
-            public void notifyCheckBoxIsClicked() {
-                /*  Handler function, called when a checkbox is checked ie. a file is
-                 *  selected.
-                 */
-                positiveBtnNameStr = positiveBtnNameStr == null ?
-                        context.getResources().getString(R.string.choose_button_label) : positiveBtnNameStr;
-                int size = MarkedItemList.getFileCount();
-                if (size == 0) {
-                    select.setEnabled(false);
-                    int color;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        color = context.getResources().getColor(R.color.colorAccent, context.getTheme());
-                    }
-                    else {
-                        color = context.getResources().getColor(R.color.colorAccent);
-                    }
-                    select.setTextColor(Color.argb(128, Color.red(color), Color.green(color), Color.blue(color)));
-                    select.setText(positiveBtnNameStr);
+        mFileListAdapter.setNotifyItemCheckedListener(() -> {
+            /*  Handler function, called when a checkbox is checked ie. a file is
+             *  selected.
+             */
+            positiveBtnNameStr = positiveBtnNameStr == null ?
+                    context.getResources().getString(R.string.choose_button_label) : positiveBtnNameStr;
+            int size1 = MarkedItemList.getFileCount();
+            if (size1 == 0) {
+                select.setEnabled(false);
+                int color;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    color = context.getResources().getColor(R.color.colorAccent, context.getTheme());
                 } else {
-                    select.setEnabled(true);
-                    int color;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        color = context.getResources().getColor(R.color.colorAccent, context.getTheme());
-                    }
-                    else {
-                        color = context.getResources().getColor(R.color.colorAccent);
-                    }
-                    select.setTextColor(color);
-                    String button_label = positiveBtnNameStr + " (" + size + ") ";
-                    select.setText(button_label);
+                    color = context.getResources().getColor(R.color.colorAccent);
                 }
-                if (properties.selection_mode == DialogConfigs.SINGLE_MODE) {
-                    /*  If a single file has to be selected, clear the previously checked
-                     *  checkbox from the list.
-                     */
-                    mFileListAdapter.notifyDataSetChanged();
+                select.setTextColor(Color.argb(128, Color.red(color), Color.green(color), Color.blue(color)));
+                select.setText(positiveBtnNameStr);
+            } else {
+                select.setEnabled(true);
+                int color;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    color = context.getResources().getColor(R.color.colorAccent, context.getTheme());
+                } else {
+                    color = context.getResources().getColor(R.color.colorAccent);
                 }
+                select.setTextColor(color);
+                String button_label = positiveBtnNameStr + " (" + size1 + ") ";
+                select.setText(button_label);
+            }
+            if (properties.selection_mode == DialogConfigs.SINGLE_MODE) {
+                /*  If a single file has to be selected, clear the previously checked
+                 *  checkbox from the list.
+                 */
+                mFileListAdapter.notifyDataSetChanged();
             }
         });
         listView.setAdapter(mFileListAdapter);
@@ -212,11 +177,7 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
     @Override
     protected void onStart() {
         super.onStart();
-        positiveBtnNameStr = (
-                positiveBtnNameStr == null ?
-                context.getResources().getString(R.string.choose_button_label) :
-                positiveBtnNameStr
-        );
+        positiveBtnNameStr = (positiveBtnNameStr == null ? context.getResources().getString(R.string.choose_button_label) : positiveBtnNameStr);
         select.setText(positiveBtnNameStr);
         if (Utility.checkStorageAccessPermissions(context)) {
             File currLoc;
@@ -274,7 +235,7 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
                     Toast.makeText(context, R.string.error_dir_access, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                MaterialCheckbox fmark = (MaterialCheckbox) view.findViewById(R.id.file_mark);
+                MaterialCheckbox fmark = view.findViewById(R.id.file_mark);
                 fmark.performClick();
             }
         }
