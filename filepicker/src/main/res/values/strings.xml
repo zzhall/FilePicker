@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel_button_label">取消</string>
+    <string name="choose_button_label">选择</string>
+    <string name="default_dir" translatable="false">/sdcard</string>
+    <string name="label_parent_directory">上层文件夹</string>
+    <string name="last_edit">编辑时间: </string>
+    <string name="error_dir_access">目录无法访问</string>
+    <string name="label_parent_dir" translatable="false">...</string>
+</resources>

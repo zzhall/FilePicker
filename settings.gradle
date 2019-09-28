@@ -1,0 +1,2 @@
+include ':app', ':fileselector', ':filepicker'
+rootProject.name='FileSelector'
