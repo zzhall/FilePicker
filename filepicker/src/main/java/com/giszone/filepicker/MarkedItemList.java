@@ -1,8 +1,7 @@
 
-package com.giszone.filepicker.model;
+package com.giszone.filepicker;
 
 import java.util.HashMap;
-import java.util.Set;
 
 
 /*  SingleTon containing <Key,Value> pair of all the selected files.
@@ -10,10 +9,11 @@ import java.util.Set;
  *  Value: FileListItem Object.
  */
 public class MarkedItemList {
+
     private static HashMap<String, FileListItem> ourInstance = new HashMap<>();
 
-    public static void addSelectedItem(FileListItem item) {
-        ourInstance.put(item.getLocation(), item);
+    public static void addMultiItem(FileListItem item) {
+        ourInstance.put(item.getPath(), item);
     }
 
     public static void removeSelectedItem(String key) {
@@ -29,18 +29,12 @@ public class MarkedItemList {
     }
 
     public static void addSingleFile(FileListItem item) {
-        ourInstance = new HashMap<>();
-        ourInstance.put(item.getLocation(), item);
+        ourInstance.clear();
+        ourInstance.put(item.getPath(), item);
     }
 
     public static String[] getSelectedPaths() {
-        Set<String> paths = ourInstance.keySet();
-        String[] fpaths = new String[paths.size()];
-        int i = 0;
-        for (String path : paths) {
-            fpaths[i++] = path;
-        }
-        return fpaths;
+        return ourInstance.keySet().toArray(new String[0]);
     }
 
     public static int getFileCount() {

@@ -1,2 +1,2 @@
-include ':fileselector', ':filepicker', ':app'
-rootProject.name='FileSelector'
+include ':filepicker', ':app'
+rootProject.name = 'FileSelector'

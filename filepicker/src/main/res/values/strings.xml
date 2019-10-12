@@ -5,5 +5,5 @@
     <string name="default_dir" translatable="false">/sdcard</string>
     <string name="label_parent_directory">上层文件夹</string>
     <string name="error_dir_access">目录无法访问</string>
-    <string name="label_parent_dir" translatable="false">...</string>
+    <string name="label_parent_dir">...</string>
 </resources>

@@ -1,11 +1,11 @@
 
-package com.giszone.filepicker.utils;
+package com.giszone.filepicker;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-
-import com.giszone.filepicker.model.FileListItem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,11 +24,16 @@ public class Utility {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             String permission = "android.permission.READ_EXTERNAL_STORAGE";
             int res = context.checkCallingOrSelfPermission(permission);
-            return (res == PackageManager.PERMISSION_GRANTED);
+            boolean isGranted = res == PackageManager.PERMISSION_GRANTED;
+            if (!isGranted) {
+                ((Activity) context).requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, FilePickerDialog.EXTERNAL_READ_PERMISSION_GRANT);
+            }
+            return isGranted;
         } else {   //Pre Marshmallow can rely on Manifest defined permissions.
             return true;
         }
     }
+
 
     /**
      * Prepares the list of Files and Folders inside 'inter' Directory.
@@ -51,13 +56,8 @@ public class Utility {
                 //If file/directory can be read by the Application
                 if (name.canRead()) {
                     //Create a row item for the directory list and define properties.
-                    FileListItem item = new FileListItem();
-                    item.setFilename(name.getName());
-                    item.setDirectory(name.isDirectory());
-                    item.setLocation(name.getAbsolutePath());
-                    item.setTime(name.lastModified());
                     //Add row to the List of directories/files
-                    internalList.add(item);
+                    internalList.add(new FileListItem(name.getName(), name.getAbsolutePath(), name.lastModified(), name.isDirectory()));
                 }
             }
             //Sort the files and directories in alphabetical order.
