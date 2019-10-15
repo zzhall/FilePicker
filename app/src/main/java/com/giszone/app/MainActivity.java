@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                     .setPrimaryDir(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StitchTest")
                     .setExtensions(new String[]{"png", "jpg"})
                     .setBackCancelable(true)
-                    .setOutsideCancelable(false)
+                    .setOutsideCancelable(true)
                     .setDialogListener("确定", "取消", new FilePickerDialog.FileDialogListener() {
                         @Override
                         public void onSelectedFilePaths(String[] filePaths) {
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onCanceled() {
-
+                            Log.d("MainTAG", "MainActivity.onCanceled: ");
                         }
                     })
                     .show();

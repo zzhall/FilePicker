@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
@@ -69,7 +68,8 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
         primaryDir = new File(DEFAULT_DIR);
         extensions = new String[]{""};
         positionMap = new HashMap<>();
-        this.setCanceledOnTouchOutside(false);
+        this.setCancelable(true);
+        this.setCanceledOnTouchOutside(true);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
         int size = MarkedItemList.getFileCount();
         if (size == 0) {
             btnSelect.setEnabled(false);
-            int color = context.getResources().getColor(R.color.colorAccent);
+            int color = context.getResources().getColor(R.color.colorPrimary, context.getTheme());
             btnSelect.setTextColor(Color.argb(128, Color.red(color), Color.green(color), Color.blue(color)));
         }
 
@@ -110,12 +110,17 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
             }
             dismiss();
         });
+        this.setOnCancelListener(dialog -> {
+            if (listener != null) {
+                listener.onCanceled();
+            }
+        });
 
         mFileListAdapter = new FileListAdapter(context, internalList, selectType, selectMode);
         mFileListAdapter.setFileItemSelectedListener(() -> {
             selectBtnText = selectBtnText == null ? context.getResources().getString(R.string.choose_button_label) : selectBtnText;
             int size1 = MarkedItemList.getFileCount();
-            int color = context.getResources().getColor(R.color.colorAccent, context.getTheme());
+            int color = context.getResources().getColor(R.color.colorPrimary, context.getTheme());
             if (size1 == 0) {
                 btnSelect.setEnabled(false);
                 btnSelect.setTextColor(Color.argb(128, Color.red(color), Color.green(color), Color.blue(color)));
@@ -374,7 +379,6 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
         Integer position = positionMap.get(curDirPath);
         if (position == null || position != firstVisibleItem) {
             positionMap.put(curDirPath, firstVisibleItem);
-            Log.d("MainTAG", "FilePickerDialog.onScroll: " + positionMap.toString());
         }
     }
 

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -72,14 +70,6 @@ public class FileListAdapter extends BaseAdapter {
 
         final FileListItem item = listItem.get(position);
 
-        if (MarkedItemList.hasItem(item.getPath())) {
-            Animation animation = AnimationUtils.loadAnimation(context, R.anim.marked_item_animation);
-            view.setAnimation(animation);
-        } else {
-            Animation animation = AnimationUtils.loadAnimation(context, R.anim.unmarked_item_animation);
-            view.setAnimation(animation);
-        }
-
         String name = item.getName();
         boolean isDirectory = item.isDirectory();
 
@@ -107,7 +97,6 @@ public class FileListAdapter extends BaseAdapter {
                     break;
             }
         }
-
 
         holder.cbMark.setOnCheckedChangeListener(null);
         if (MarkedItemList.hasItem(item.getPath())) {
