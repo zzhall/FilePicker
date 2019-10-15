@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
+    android:gravity="center_vertical"
     android:minHeight="?android:listPreferredItemHeight"
     android:orientation="horizontal">
 
@@ -12,18 +13,17 @@
         android:id="@+id/iv_file_type"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:scaleType="centerInside" />
+        android:paddingStart="15dp"
+        android:paddingEnd="10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_type_file" />
 
     <LinearLayout
         style="?android:attr/background"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:focusable="false"
-        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
@@ -49,6 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
+        android:button="@null"
+        android:drawableStart="@drawable/sl_checkbox"
         android:gravity="center"
-        android:paddingEnd="8dp" />
+        android:padding="15dp" />
 </LinearLayout>

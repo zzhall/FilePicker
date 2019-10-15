@@ -13,7 +13,6 @@ import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +22,6 @@ import com.giszone.filepicker.filepicker.R;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -225,8 +223,11 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
                     Toast.makeText(context, R.string.error_dir_access, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                CheckBox fmark = view.findViewById(R.id.cb_file_mark);
-                fmark.performClick();
+                if (selectType == TYPE_DIR) {
+                    Toast.makeText(context, "只能选文件夹", Toast.LENGTH_SHORT).show();
+                } else {
+                    view.findViewById(R.id.cb_file_mark).performClick();
+                }
             }
         }
     }
@@ -292,51 +293,6 @@ public class FilePickerDialog extends Dialog implements AdapterView.OnItemClickL
     public FilePickerDialog setOutsideCancelable(boolean cancelable) {
         this.setCanceledOnTouchOutside(cancelable);
         return this;
-    }
-
-    public void markFiles(List<String> paths) {
-        if (paths != null && paths.size() > 0) {
-            int count = (selectMode == MODE_SINGLE) ? 1 : paths.size();
-            for (int i = 0; i < count; i++) {
-                String path = paths.get(i);
-                File temp = new File(path);
-                if (temp.exists()) {
-                    switch (selectType) {
-                        case TYPE_DIR:
-                            if (temp.isDirectory()) {
-                                MarkedItemList.addMultiItem(new FileListItem(
-                                        temp.getName(),
-                                        temp.getAbsolutePath(),
-                                        temp.lastModified(),
-                                        true,
-                                        true
-                                ));
-                            }
-                            break;
-                        case TYPE_FILE:
-                            if (temp.isFile()) {
-                                MarkedItemList.addMultiItem(new FileListItem(
-                                        temp.getName(),
-                                        temp.getAbsolutePath(),
-                                        temp.lastModified(),
-                                        false,
-                                        true
-                                ));
-                            }
-                            break;
-                        case TYPE_ALL:
-                            MarkedItemList.addMultiItem(new FileListItem(
-                                    temp.getName(),
-                                    temp.getAbsolutePath(),
-                                    temp.lastModified(),
-                                    temp.isDirectory(),
-                                    true
-                            ));
-                            break;
-                    }
-                }
-            }
-        }
     }
 
     @Override

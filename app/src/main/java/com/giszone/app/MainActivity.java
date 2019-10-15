@@ -20,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv).setOnClickListener(v -> {
             new FilePickerDialog(this)
                     .setTitleText("选择影像路径：")
-                    .setSelectMode(FilePickerDialog.MODE_MULTI)
+                    .setSelectMode(FilePickerDialog.MODE_SINGLE)
                     .setSelectType(FilePickerDialog.TYPE_ALL)
                     .setRootDir(Environment.getExternalStorageDirectory().getAbsolutePath())
                     .setPrimaryDir(Environment.getExternalStorageDirectory().getAbsolutePath() + "/StitchTest")
-                    .setExtensions(null)
-                    .setBackCancelable(false)
+                    .setExtensions(new String[]{"png", "jpg"})
+                    .setBackCancelable(true)
                     .setOutsideCancelable(false)
                     .setDialogListener("确定", "取消", new FilePickerDialog.FileDialogListener() {
                         @Override

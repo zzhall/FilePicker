@@ -108,6 +108,7 @@ public class FileListAdapter extends BaseAdapter {
             }
         }
 
+
         holder.cbMark.setOnCheckedChangeListener(null);
         if (MarkedItemList.hasItem(item.getPath())) {
             holder.cbMark.setChecked(true);
@@ -139,6 +140,7 @@ public class FileListAdapter extends BaseAdapter {
             }
             item.setMarked(isChecked);
             fileItemSelectedListener.onFileItemSelected();
+            notifyDataSetChanged();
         });
         return view;
     }

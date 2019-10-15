@@ -27,21 +27,22 @@ public class ExtensionFilter implements FileFilter {
      */
     @Override
     public boolean accept(File file) {
-        //All directories are added in the least that can be read by the Application
-        if (file.isDirectory() && file.canRead()) {
-            return true;
-        } else if (selectType == FilePickerDialog.TYPE_DIR) {   /*  True for files, If the selection type is Directory type, ie.
-         *  Only directory has to be selected from the list, then all files are
-         *  ignored.
-         */
+        if (file.getName().startsWith(".")) {
             return false;
-        } else {   /*  Check whether name of the file ends with the extension. Added if it
-         *  does.
-         */
-            String name = file.getName().toLowerCase(Locale.getDefault());
-            for (String ext : validExtensions) {
-                if (name.endsWith(ext)) {
-                    return true;
+        } else if (file.isDirectory()) {
+            // 文件夹始终显示
+            return file.canRead();
+        } else {
+            if (selectType == FilePickerDialog.TYPE_DIR) {
+                // 文件始终显示
+                return true;
+            } else {
+                // 只显示对应的文件
+                String name = file.getName().toLowerCase(Locale.getDefault());
+                for (String ext : validExtensions) {
+                    if (name.endsWith(ext.toLowerCase())) {
+                        return true;
+                    }
                 }
             }
         }
